@@ -3,6 +3,9 @@ VBS from betterGPUwin team
 Requirements:
 - Python 3.10
 - Linux or WSL2
+- ffmpeg
+        make ffmpeg
+- Config: Vaof file config/common_config sửa lại tham số
 
 To setup
     make install 
@@ -13,4 +16,4 @@ To make new collection:
 
         make init
 or
-        python src/init.py -p collection
+        python src/init.py 

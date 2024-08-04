@@ -1,3 +1,4 @@
 psutil
 PyYAML
 python-dotenv
+rich
