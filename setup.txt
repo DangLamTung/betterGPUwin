@@ -2,3 +2,7 @@ psutil
 PyYAML
 python-dotenv
 rich
+scenedetect[opencv-headless]
+av 
+pandas
+moviepy

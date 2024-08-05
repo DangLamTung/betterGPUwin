@@ -1,4 +1,5 @@
 install:
+	sudo apt update && sudo apt install ffmpeg && sudo apt install -y mkvtoolnix && rm -rf /var/lib/apt/lists/*
 	pip install -r setup.txt
 
 init:
@@ -6,17 +7,5 @@ init:
 	python src/init.py
 
 ffmpeg:
-	# on Ubuntu or Debian
+# on Ubuntu or Debian
 	sudo apt update && sudo apt install ffmpeg
-
-# # on Arch Linux
-# sudo pacman -S ffmpeg
-
-# # on MacOS using Homebrew (https://brew.sh/)
-# brew install ffmpeg
-
-# # on Windows using Chocolatey (https://chocolatey.org/)
-# choco install ffmpeg
-
-# # on Windows using Scoop (https://scoop.sh/)
-# scoop install ffmpeg

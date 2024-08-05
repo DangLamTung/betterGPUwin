@@ -7,6 +7,9 @@ from datetime import datetime
 import os
 import psutil
 import yaml
+import shutil
+import subprocess
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -75,3 +78,19 @@ def read_config(path = 'config/config.yaml'):
     with open(path, 'r') as file:
         data = yaml.safe_load(file)
     return data
+
+def is_gpu_available():
+    # FIXME we are assuming nvidia-smi is installed on systems with GPU(s)
+    if shutil.which('nvidia-smi') is None:
+        return False
+
+    try:
+        command = "nvidia-smi --list-gpus | wc -l"
+        gpus = subprocess.check_output(command, shell=True, text='utf8')
+        return int(gpus) > 0
+
+    except Exception:
+        return False
+    
+if __name__ == "__main__":
+    print("Has GPU?", is_gpu_available())
