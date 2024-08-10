@@ -10,7 +10,7 @@ import threading
 import urllib.parse
 import urllib.request
 import argparse
-from src.Utils.utils import read_config, is_gpu_available
+from src.Utils.utils import read_config, is_gpu_available, run_command
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn, MofNCompleteColumn
 
 # TODO test supported video formats
@@ -284,41 +284,6 @@ class ImportCommand:
         urllib.request.urlretrieve(video_url.geturl(), video_out, show_progress_fn)
         return video_id, video_out
 
-
-    def run_command(self, command, stdout_callback=None, stderr_callback=None):
-        """
-        Run a system command and optionally process its output.
-        
-        Args:
-            command (list): The command to run as a list of strings.
-            stdout_callback (callable, optional): Function to process stdout lines.
-            stderr_callback (callable, optional): Function to process stderr lines.
-        
-        Returns:
-            int: The return code of the command.
-        """
-        process = subprocess.Popen(
-            command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True,
-            bufsize=1
-        )
-
-        for stdout_line in process.stdout:
-            if stdout_callback:
-                stdout_callback(stdout_line.strip())
-            print(stdout_line.strip())
-
-        for stderr_line in process.stderr:
-            if stderr_callback:
-                stderr_callback(stderr_line.strip())
-            print(stderr_line.strip(), file=sys.stderr)
-
-        process.wait()
-
-        return 
-
     def create_resized_videos(self, video_path, video_id, force=False, gpu=False, show_progress=None):
         """ Creates downsampled videos for visualization purposes.
             This implementation uses a dockerized version of ffmpeg.
@@ -364,7 +329,7 @@ class ImportCommand:
             ffprobe_output.append(line)
 
         ffprobe_output = []
-        ret = self.run_command(ffprobe_command, stdout_callback=ffprobe_stdout_callback)
+        ret = run_command(ffprobe_command, stdout_callback=ffprobe_stdout_callback)
  
         ffprobe_output = ''.join(ffprobe_output)
         duration_s = float(json.loads(ffprobe_output).get('format', {}).get('duration', 0))
@@ -409,7 +374,7 @@ class ImportCommand:
                 current_time_s = float(line.rstrip().split('=')[1]) / 1_000_000
                 show_progress(current_time_s, duration_s)
 
-        return self.run_command(command, stdout_callback=ffmpeg_stdout_callback)
+        return run_command(command, stdout_callback=ffmpeg_stdout_callback)
 
     def detect_scenes(self, video_path, video_id, detection_params, max_length, force=False, show_progress=None):
         """ Detect scenes from a video file and extract the middle frame of every scene.
@@ -445,7 +410,7 @@ class ImportCommand:
             '--filename', f"{video_id}-scenes",
         ]
 
-        ret = self.run_command(command)
+        ret = run_command(command)
 
         # post-process detected scenes
         if max_length:
@@ -457,7 +422,7 @@ class ImportCommand:
                 '--max-length', str(max_length),
             ]
 
-            ret = self.run_command(command)
+            ret = run_command(command)
 
         if show_progress:
             show_progress(1, 1)  # set as completed
@@ -508,7 +473,7 @@ class ImportCommand:
             '--filename', f"{video_id}-$SCENE_NUMBER",
         ]
 
-        ret = self.run_command(command)
+        ret = run_command(command)
 
         if show_progress:
             show_progress(1, 1)  # set as completed
@@ -562,7 +527,7 @@ class ImportCommand:
                 current_frame = int(line.rstrip().split('=')[1])
                 show_progress(current_frame, n_frames)
 
-        return self.run_command(command, stdout_callback=stdout_callback)
+        return run_command(command, stdout_callback=stdout_callback)
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Import videos')
@@ -580,7 +545,7 @@ if __name__ == "__main__":
     parser.add_argument('--no-frames', dest='do_frames', default=True, action='store_false', help='Do not extract frames.')
     parser.add_argument('--no-thumbs', dest='do_thumbs', default=True, action='store_false', help='Do not create frames thumbnails.')
 
-    parser.add_argument('video_path_or_url', nargs='?', default='test-collection/videos/Phú Quốc trip.mp4', help='Path or URL to video file to be imported. If not given, resumes importing of existing videos.')
+    parser.add_argument('video_path_or_url', nargs='?', default='test-collection/videos/02082013.3gp', help='Path or URL to video file to be imported. If not given, resumes importing of existing videos.')
 
     args = parser.parse_args()
     print(args)

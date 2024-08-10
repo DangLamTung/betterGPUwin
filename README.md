@@ -17,3 +17,7 @@ To make new collection:
         make init
 or
         python src/init.py 
+
+To run analyze:
+
+        python src/analyze/analyze.py --id 02082013

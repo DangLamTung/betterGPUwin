@@ -6,3 +6,8 @@ scenedetect[opencv-headless]
 av 
 pandas
 moviepy
+h5py
+more-itertools
+torch
+torchvision 
+torchaudio

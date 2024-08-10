@@ -92,5 +92,49 @@ def is_gpu_available():
     except Exception:
         return False
     
+def run_command( command, stdout_callback=None, stderr_callback=None):
+    """
+    Run a system command and optionally process its output.
+    
+    Args:
+        command (list): The command to run as a list of strings.
+        stdout_callback (callable, optional): Function to process stdout lines.
+        stderr_callback (callable, optional): Function to process stderr lines.
+    
+    Returns:
+        int: The return code of the command.
+    """
+    process = subprocess.Popen(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        bufsize=1
+    )
+
+    for stdout_line in process.stdout:
+        if stdout_callback:
+            stdout_callback(stdout_line.strip())
+        print(stdout_line.strip())
+
+    for stderr_line in process.stderr:
+        if stderr_callback:
+            stderr_callback(stderr_line.strip())
+        print(stderr_line.strip(), file=sys.stderr)
+
+    process.wait()
+
+    return 
+
+def progress_callback(progress, task_id):
+    def _func(line, **kwargs):
+        if line.startswith('progress:'):
+            completed, total = map(int, line[len('progress:'):].strip().split('/'))
+            total = total if total >= 0 else None
+            progress.update(task_id, completed=completed, total=total)
+
+        print(line, end='', **kwargs)
+    return _func
+    
 if __name__ == "__main__":
     print("Has GPU?", is_gpu_available())
