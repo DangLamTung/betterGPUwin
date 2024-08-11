@@ -1,3 +1,6 @@
+import sys
+sys.path.append("")
+
 import csv
 from pathlib import Path
 import itertools
@@ -8,6 +11,7 @@ import more_itertools
 
 from src.analyze.utils import CliProgress
 from src.analyze.savers import GzipJsonlFile, HDF5File
+from src.Utils.utils import timeit
 
 
 class BaseExtractor(object):
@@ -114,6 +118,7 @@ class BaseExtractor(object):
             # ensure saver is closed before yielding from group
             yield from to_be_processed
 
+    @timeit
     def run(self):
         ids_and_paths = self.parse_input()
         n_images = len(ids_and_paths)

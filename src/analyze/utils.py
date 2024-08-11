@@ -2,6 +2,7 @@ import sys
 sys.path.append("")
 
 import yaml
+import torch
 
 def load_config(yaml_path):
     # load config file
@@ -73,6 +74,29 @@ def inspect_records(records):
         print("Detector:", record.get('detector'))
         print("-" * 40)
 
+def xyxy_to_yxyx(boxes: torch.Tensor) -> torch.Tensor:
+    """
+    Convert bounding boxes from xyxy format to yxyx format.
+    
+    Args:
+        boxes (torch.Tensor): Tensor of shape (N, 4) with bounding boxes in xyxy format.
+        
+    Returns:
+        torch.Tensor: Tensor of shape (N, 4) with bounding boxes in yxyx format.
+    """
+    # Ensure the input is a tensor and has the correct shape
+    if not isinstance(boxes, torch.Tensor):
+        raise TypeError("Input must be a PyTorch tensor")
+    
+    if boxes.dim() != 2 or boxes.size(1) != 4:
+        raise ValueError("Input tensor must have shape (N, 4)")
+    
+    # Convert xyxy to yxyx
+    yxyx_boxes = boxes.clone()
+    yxyx_boxes[:, [0, 1, 2, 3]] = boxes[:, [1, 0, 3, 2]]
+    
+    return yxyx_boxes
+    
 if __name__ == "__main__":
     file_path = 'test-collection/objects-frcnn-oiv4/02082013/02082013-objects-frcnn-oiv4.jsonl.gz'
     records = read_jsonl_gz(file_path)

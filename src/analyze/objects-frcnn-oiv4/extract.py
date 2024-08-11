@@ -1,3 +1,5 @@
+# python src/analyze/objects-frcnn-oiv4/extract.py --gpu test-collection/selected-frames/02082013 jsonl --output test-collection/objects-frcnn-oiv4/{video_id}/{video_id}-objects-frcnn-oiv4.jsonl.gz
+
 import sys
 sys.path.append("")
 
@@ -15,6 +17,7 @@ from torchvision.models.detection import fasterrcnn_resnet50_fpn_v2, FasterRCNN_
 from torchvision.transforms import functional as F
 
 from src.analyze.extractor import BaseExtractor
+from src.analyze.utils import xyxy_to_yxyx
 
 
 def load_image(image_path: str) -> Optional[torch.Tensor]:
@@ -40,7 +43,7 @@ def output_to_record(output: Dict[str, torch.Tensor]) -> Dict[str, Any]:
         'object_class_labels': output['labels'].tolist(),
         'object_class_names': [COCO_INSTANCE_CATEGORY_NAMES[i] for i in output['labels'].tolist()],
         'object_scores': output['scores'].tolist(),
-        'object_boxes_xyxy': output['boxes'].tolist(), #Fix to yxyx 
+        'object_boxes_yxyx': xyxy_to_yxyx(output['boxes']).tolist(), #Fix to yxyx 
         'detector': 'frcnn-oiv4',
     }
     # print("record", record)

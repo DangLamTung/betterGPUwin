@@ -11,3 +11,4 @@ more-itertools
 torch
 torchvision 
 torchaudio
+transformers
