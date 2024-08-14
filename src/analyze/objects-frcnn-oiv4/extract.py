@@ -40,7 +40,7 @@ def load_image(image_path: str) -> Optional[torch.Tensor]:
 def output_to_record(output: Dict[str, torch.Tensor]) -> Dict[str, Any]:
     # print("output", output)
     record = {
-        'object_class_labels': output['labels'].tolist(),
+        # 'object_class_labels': output['labels'].tolist(),
         'object_class_names': [COCO_INSTANCE_CATEGORY_NAMES[i] for i in output['labels'].tolist()],
         'object_scores': output['scores'].tolist(),
         'object_boxes_yxyx': xyxy_to_yxyx(output['boxes']).tolist(), #Fix to yxyx 

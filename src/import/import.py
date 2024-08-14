@@ -181,7 +181,7 @@ class ImportCommand:
         do_thumbs,
     ):
         progress_cols = [SpinnerColumn(), *Progress.get_default_columns(), MofNCompleteColumn(), TimeElapsedColumn()]
-        with Progress(*progress_cols, transient=not self.develop_mode) as progress, \
+        with Progress(*progress_cols, transient=True) as progress, \
              concurrent.futures.ThreadPoolExecutor(os.cpu_count()) as executor:
 
             def map_with_progress(func, iterable, description=None, total=None):
@@ -545,7 +545,7 @@ if __name__ == "__main__":
     parser.add_argument('--no-frames', dest='do_frames', default=True, action='store_false', help='Do not extract frames.')
     parser.add_argument('--no-thumbs', dest='do_thumbs', default=True, action='store_false', help='Do not create frames thumbnails.')
 
-    parser.add_argument('video_path_or_url', nargs='?', default='test-collection/videos/02082013.3gp', help='Path or URL to video file to be imported. If not given, resumes importing of existing videos.')
+    parser.add_argument('video_path_or_url', nargs='?', default=None, help='Path or URL to video file to be imported. If not given, resumes importing of existing videos.')
 
     args = parser.parse_args()
     print(args)

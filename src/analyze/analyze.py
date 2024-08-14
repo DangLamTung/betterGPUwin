@@ -153,7 +153,7 @@ class AnalyzeCommand:
                 prefix='bulk_analysis_',
                 suffix='.txt',
                 dir=self.collection_dir,
-                delete=not self.develop_mode,
+                delete=False,
             ) as image_list:
 
             # generate image list
@@ -171,7 +171,7 @@ class AnalyzeCommand:
 
                     for video_frame in video_frames:
                         frame_id = video_frame.stem
-                        frame_path = '/data' / video_frame.relative_to(self.collection_dir)
+                        frame_path = video_frame
                         image_list.write(f'{video_id}\t{frame_id}\t{frame_path}\n')
                         n_frames += 1
 
@@ -369,7 +369,7 @@ class AnalyzeCommand:
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Analyze videos')
-    parser.add_argument('--id', dest='video_ids', nargs='+', default=(["02082013"]), help='Video ID(s) to be indexed. If not given, proceeds on all imported videos.')
+    parser.add_argument('--id', dest='video_ids', nargs='+', default=(), help='Video ID(s) to be indexed. If not given, proceeds on all imported videos.')
     parser.add_argument('--image-list', dest='image_list_path', default=None, type=Path, help='Path to a file containing a list of images to analyze.')
     parser.add_argument('--replace', default=False, action='store_true', help='Replace any existing analyses.')
     parser.add_argument('--no-gpu', dest='gpu', default=is_gpu_available(), action='store_false', help='Do not use the GPU if available.')
