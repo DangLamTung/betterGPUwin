@@ -17,6 +17,9 @@ make dino: #test object detect ground dino
 # python src/analyze/objects-ground-dino/extract.py --gpu test-collection/selected-frames/02082013 jsonl --output test-collection/objects-ground-dino/{video_id}/{video_id}-objects-ground-dino.jsonl.gz
 	python src/analyze/objects-ground-dino/extract.py --gpu "test-collection/selected-frames/Phú Quốc trip" jsonl --output test-collection/objects-ground-dino/{video_id}/{video_id}-objects-ground-dino.jsonl.gz
 
+make clip:
+	python src/analyze/features-clip/extract.py --gpu --batch-size 1 'test-collection/selected-frames/02082013' 'hdf5' --features-name 'clip' --output test-collection/features-clip/{video_id}/{video_id}-clip.hdf5
+
 ffmpeg:
 # on Ubuntu or Debian
 	sudo apt update && sudo apt install ffmpeg

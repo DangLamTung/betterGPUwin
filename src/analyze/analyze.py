@@ -263,8 +263,8 @@ class AnalyzeCommand:
         if video_id:
             input_path = self.collection_dir / 'selected-frames' / video_id
 
-        input_path = '/data' / input_path.relative_to(self.collection_dir)
-        output_template = '/data' / output_template.relative_to(self.collection_dir)
+        # input_path = '/data' / input_path.relative_to(self.collection_dir)
+        # output_template = '/data' / output_template.relative_to(self.collection_dir)
 
         cmd_params = []
         for k, v in params.items():
@@ -272,17 +272,17 @@ class AnalyzeCommand:
 
         service = f'features-{extractor}'
         command = [
-            'python', 'extract.py',
+            'python', f'src/analyze/{service}/extract.py',
         ] + (['--force'] if force else []) + [
         ] + (['--gpu'] if gpu else []) + [
         ] + cmd_params + [
-            str(input_path),
+            f"{str(input_path)}",
             'hdf5',
             '--features-name', extractor,
             '--output', str(output_template),
         ]
 
-        return self.compose_run(service, command, **run_kws)
+        return run_command(command, stdout_callback = run_kws['stdout_callback'])
 
     def detect_objects(self, detector_name, image_list=None, video_id=None, force=False, gpu=False, params={}, **run_kws):
         """ Detects objects in selected keyframes.
