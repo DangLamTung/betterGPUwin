@@ -20,6 +20,9 @@ make dino: #test object detect ground dino
 make clip:
 	python src/analyze/features-clip/extract.py --gpu --batch-size 1 'test-collection/selected-frames/02082013' 'hdf5' --features-name 'clip' --output test-collection/features-clip/{video_id}/{video_id}-clip.hdf5
 
+make cluster:
+	python src/analyze/frame-cluster/cluster.py 'test-collection/features-clip/02082013/02082013-clip.hdf5' 'test-collection/cluster-codes/02082013/02082013-cluster-codes.jsonl.gz'
+
 ffmpeg:
 # on Ubuntu or Debian
 	sudo apt update && sudo apt install ffmpeg

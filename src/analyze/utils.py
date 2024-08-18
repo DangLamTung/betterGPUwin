@@ -98,7 +98,7 @@ def xyxy_to_yxyx(boxes: torch.Tensor) -> torch.Tensor:
     return yxyx_boxes
     
 if __name__ == "__main__":
-    file_path = 'test-collection/objects-frcnn-oiv4/02082013/02082013-objects-frcnn-oiv4.jsonl.gz'
+    file_path = 'test-collection/cluster-codes/Phú Quốc trip/Phú Quốc trip-cluster-codes.jsonl.gz'
     records = read_jsonl_gz(file_path)
     inspect_records(records)
 

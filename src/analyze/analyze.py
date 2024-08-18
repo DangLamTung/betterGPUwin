@@ -354,18 +354,19 @@ class AnalyzeCommand:
         features_file = self.collection_dir / f'features-{features}' / video_id / f'{video_id}-{features}.hdf5'
         assert features_file.exists(), f"Cannot cluster by {features}, file not found: {features_file}"
 
-        input_file = '/data' / features_file.relative_to(self.collection_dir)
-        output_file = '/data' / clusters_file.relative_to(self.collection_dir)
+        input_file = features_file
+        output_file = clusters_file
 
         service = 'frame-cluster'
         command = [
-            'python', 'cluster.py',
+            'python', f'src/analyze/{service}/cluster.py',
             str(input_file),
         ] + (['--force'] if force else []) + [
             str(output_file),
         ]
+        return run_command(command)
 
-        return self.compose_run(service, command, **run_kws)
+        # return self.compose_run(service, command, **run_kws)
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Analyze videos')

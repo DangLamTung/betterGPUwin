@@ -13,3 +13,4 @@ torchvision
 torchaudio
 transformers
 sentencepiece
+scikit-learn
