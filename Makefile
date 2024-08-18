@@ -10,7 +10,7 @@ import:
 	python src/import/import.py --bulk
 
 analyze: 
-	python src/analyze/analyze.py --id "Phú Quốc trip"
+	python src/analyze/analyze.py --id "02082013"
 # python src/analyze/analyze.py --id 02082013
 
 make dino: #test object detect ground dino

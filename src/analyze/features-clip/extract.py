@@ -20,7 +20,7 @@ class FeatureExtractor(BaseExtractor):
     @classmethod
     def add_arguments(cls, parser: argparse.ArgumentParser):
         parser.add_argument('--device', default='cuda' if torch.cuda.is_available() else 'cpu', help='Device to use for inference')
-        parser.add_argument('--model_id', default=";", help='Model ID model huggingface')
+        parser.add_argument('--model_id', default="nielsr/siglip-base-patch16-224", help='Model ID model huggingface')
         parser.add_argument('--batch-size', type=int, default=4, help='Batch-size for processing')
         parser.add_argument('--max_objects', type=int, default=5, help='Take the first N objects has highest scores')
         super(FeatureExtractor, cls).add_arguments(parser)
@@ -30,7 +30,7 @@ class FeatureExtractor(BaseExtractor):
         self.device =  torch.device('cuda' if torch.cuda.is_available() else "cpu")
         self.model_id = args.model_id
 
-        self.model = SiglipModel.from_pretrained("nielsr/siglip-base-patch16-224")
+        self.model = SiglipModel.from_pretrained(self.model_id)
         # processor = AutoProcessor.from_pretrained(args.model_id)
         # tokenizer = AutoTokenizer.from_pretrained(args.model_id)
         self.batch_size = args.batch_size
@@ -45,7 +45,7 @@ class FeatureExtractor(BaseExtractor):
 
         print(f'Loading SigLip model: {self.model_id}')
         self.processor = AutoProcessor.from_pretrained(self.model_id)
-        self.model = SiglipModel.from_pretrained("nielsr/siglip-base-patch16-224")
+        self.model = SiglipModel.from_pretrained(self.model_id)
         print(f'Loaded SigLip model.')
 
     def load_image(self, image_path: str) -> Optional[Image.Image]:
@@ -72,7 +72,7 @@ class FeatureExtractor(BaseExtractor):
                 images_features = self.model.get_image_features(**inputs)
                 # return image_features
                 records = [{'feature_vector': f.tolist()} for f in images_features.cpu().numpy()]
-
+                # print("records", records)
             return records
 
         batch = []
