@@ -97,8 +97,27 @@ def xyxy_to_yxyx(boxes: torch.Tensor) -> torch.Tensor:
     
     return yxyx_boxes
     
+def read_hdf5_file(file_path):
+    import h5py
+    with h5py.File(file_path, 'r') as f:
+        # Display the available datasets in the file
+        print("Datasets in the file:")
+        for name in f:
+            print(name)
+
+        # Example: Accessing datasets
+        ids = f['ids'][:]
+        features = f['data'][:]
+
+        print("\nIDs:", ids)
+        print("Features Shape:", features.shape)
+
 if __name__ == "__main__":
-    file_path = 'test-collection/cluster-codes/Phú Quốc trip/Phú Quốc trip-cluster-codes.jsonl.gz'
+    file_path = 'test-collection/objects-frcnn-oiv4/02082013/02082013-objects-frcnn-oiv4_sample.jsonl.gz'
     records = read_jsonl_gz(file_path)
     inspect_records(records)
+
+
+    # file_path = 'test-collection/features-clip/02082013/02082013-clip.hdf5'
+    # a = read_hdf5_file(file_path)
 

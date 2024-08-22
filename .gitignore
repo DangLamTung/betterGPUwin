@@ -166,3 +166,4 @@ test-collection/
 *.png
 .env
 venv/
+test/

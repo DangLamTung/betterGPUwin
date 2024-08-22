@@ -18,7 +18,7 @@ class FeatureExtractor(BaseExtractor):
     """Extracts objects from images using GroundingDINO model."""
 
     @classmethod
-    def add_arguments(cls, parser: argparse.ArgumentParser):
+    def add_arguments(cls, parser: argparse.ArgumentParser): 
         parser.add_argument('--device', default='cuda' if torch.cuda.is_available() else 'cpu', help='Device to use for inference')
         parser.add_argument('--model_id', default="nielsr/siglip-base-patch16-224", help='Model ID model huggingface')
         parser.add_argument('--batch-size', type=int, default=4, help='Batch-size for processing')

@@ -7,10 +7,10 @@ init:
 	python src/init.py
 
 import:
-	python src/import/import.py --bulk
+	python src/import/import.py --bulk --no-resize
 
 analyze: 
-	python src/analyze/analyze.py --id "02082013"
+	python src/analyze/analyze.py --id "visione_guide"
 # python src/analyze/analyze.py --id 02082013
 
 make dino: #test object detect ground dino
